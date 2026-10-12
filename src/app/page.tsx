@@ -1,69 +1,83 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, GitPullRequest } from "lucide-react";
+import PageShell from "@/components/PageShell";
+import NovelCard from "@/components/NovelCard";
+import Cover from "@/components/Cover";
+import GenrePills from "@/components/GenrePills";
+import { getLatestChapters, getNovelSummaries } from "@/lib/novels";
+import { formatDate, formatNumber } from "@/lib/utils";
 
-export default function Home() {
+export default function HomePage() {
+  const novels = getNovelSummaries();
+  const [featured, ...rest] = novels;
+  const latest = getLatestChapters(5);
+  const totalChapters = novels.reduce((s, n) => s + n.chapterCount, 0);
+  const totalWords = novels.reduce((s, n) => s + n.wordCount, 0);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <PageShell>
+      <section className="mb-8 max-w-2xl">
+        <h1 className="font-serif text-4xl leading-tight sm:text-5xl">Read novels the community publishes in the open.</h1>
+        <p className="mt-3 text-lg text-mute">No accounts, no ads. Every chapter is a Markdown file in Git, reviewed through a pull request.</p>
+      </section>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        {featured && (
+          <Link
+            href={`/novel/${featured.slug}`}
+            className="group relative min-h-[22rem] overflow-hidden rounded-[2rem] md:col-span-2 md:row-span-2"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <Cover novel={featured} className="absolute inset-0 h-full w-full" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+            <div className="relative flex h-full min-h-[22rem] flex-col justify-end gap-3 p-7 text-white">
+              <GenrePills genres={featured.genres} onDark />
+              <h2 className="font-serif text-4xl leading-tight">{featured.title}</h2>
+              <p className="line-clamp-4 max-w-md text-white/85">{featured.synopsis}</p>
+              <span className="flex items-center gap-1.5 text-sm font-medium">
+                {featured.chapterCount} chapters by {featured.author} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+              </span>
+            </div>
+          </Link>
+        )}
+
+        <section className="rounded-2xl border border-line bg-white p-5 md:col-span-2">
+          <h2 className="font-serif text-xl">Latest chapters</h2>
+          <ul className="mt-3 divide-y divide-line">
+            {latest.map(({ novel, chapter }) => (
+              <li key={`${novel.slug}-${chapter.chapter}`}>
+                <Link href={`/novel/${novel.slug}/${chapter.chapter}`} className="flex items-baseline justify-between gap-3 py-2 hover:text-accent">
+                  <span className="min-w-0 truncate">
+                    <span className="font-medium">{novel.title}</span>
+                    <span className="text-mute">, ch. {chapter.chapter}: {chapter.title}</span>
+                  </span>
+                  <time className="shrink-0 text-xs text-mute" dateTime={chapter.publishedAt}>{formatDate(chapter.publishedAt)}</time>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <Link href="/submit" className="group flex flex-col justify-between rounded-3xl bg-accent p-5 text-white transition-colors hover:bg-accent-deep">
+          <GitPullRequest className="h-6 w-6" aria-hidden />
+          <div>
+            <h2 className="mt-8 font-serif text-2xl leading-tight">Publish your chapter</h2>
+            <p className="mt-1 text-sm text-white/80">Write in the browser. We open the pull request for you.</p>
+          </div>
+        </Link>
+
+        <section className="flex flex-col justify-between rounded-xl border border-line bg-white p-5">
+          <p className="text-sm text-mute">In the library</p>
+          <dl className="mt-4 space-y-1">
+            <div className="flex items-baseline gap-2"><dt className="sr-only">Novels</dt><dd className="font-serif text-3xl">{novels.length}</dd><span className="text-sm text-mute">novels</span></div>
+            <div className="flex items-baseline gap-2"><dt className="sr-only">Chapters</dt><dd className="font-serif text-3xl">{totalChapters}</dd><span className="text-sm text-mute">chapters</span></div>
+            <div className="flex items-baseline gap-2"><dt className="sr-only">Words</dt><dd className="font-serif text-3xl">{formatNumber(totalWords)}</dd><span className="text-sm text-mute">words</span></div>
+          </dl>
+        </section>
+
+        {rest.map((n) => (
+          <div key={n.slug} className="md:col-span-2"><NovelCard novel={n} /></div>
+        ))}
+      </div>
+    </PageShell>
   );
 }

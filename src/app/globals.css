@@ -1,26 +1,31 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+body { @apply bg-paper text-ink font-sans antialiased; }
+:focus-visible { outline: 2px solid #3340d8; outline-offset: 2px; }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Reader typography is driven by CSS variables set by ReaderShell. */
+.reader-prose {
+  --tw-prose-body: var(--r-fg);
+  --tw-prose-headings: var(--r-fg);
+  --tw-prose-bold: var(--r-fg);
+  --tw-prose-links: var(--r-fg);
+  --tw-prose-quotes: var(--r-fg);
+  --tw-prose-quote-borders: var(--r-border);
+  --tw-prose-hr: var(--r-border);
+  --tw-prose-counters: var(--r-muted);
+  --tw-prose-bullets: var(--r-muted);
+  --tw-prose-captions: var(--r-muted);
+  --tw-prose-code: var(--r-fg);
+  --tw-prose-th-borders: var(--r-border);
+  --tw-prose-td-borders: var(--r-border);
 }
+.reader-prose p { line-height: 1.85; text-wrap: pretty; }
+.reader-prose blockquote { font-style: normal; font-weight: 400; }
+.reader-prose blockquote p::before, .reader-prose blockquote p::after { content: none; }
+/* Scene break (***) renders as a centered ornament. */
+.reader-prose hr { border: 0; height: auto; margin: 2.5em 0; text-align: center; }
+.reader-prose hr::after { content: "*  *  *"; color: var(--r-muted); letter-spacing: 0.4em; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
