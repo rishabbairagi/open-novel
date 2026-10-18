@@ -3,8 +3,10 @@ import { BookOpen, PenLine, Sparkles } from "lucide-react";
 
 export default function PageShell({
   children,
+  width = "w-full",
 }: {
   children: React.ReactNode;
+  width?: string;
 }) {
   return (
     <div className="flex min-h-screen flex-col bg-[#FBFBFA] text-[#1A1A1A]">
@@ -38,7 +40,7 @@ export default function PageShell({
         </div>
       </header>
 
-      <main className={'mx-auto w-full flex-1 px-6 py-12'}>{children}</main>
+      <main className={`mx-auto w-full flex-1 px-6 py-12 ${width}`}>{children}</main>
 
       <footer className="mt-auto border-t border-[#EAE9E5] bg-[#F7F6F2] py-8 text-center text-sm text-[#71717A]">
         <div className="mx-auto flex flex-col items-center justify-between gap-3 px-6 sm:flex-row">

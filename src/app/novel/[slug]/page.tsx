@@ -28,7 +28,7 @@ export default async function NovelPage({ params }: { params: Params }) {
   const chapters = getChapterList(slug);
 
   return (
-    <PageShell>
+    <PageShell width="w-full">
       <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
         <Cover novel={novel} className="h-80 w-52 shrink-0 rounded-2xl shadow-xl ring-1 ring-black/10" />
         <div className="flex flex-col justify-between space-y-4">

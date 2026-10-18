@@ -16,7 +16,7 @@ export default function HomePage() {
 
   return (
     <PageShell>
-      <section className="mb-12 space-y-3">
+      <section className="mb-12 max-w-3xl space-y-3">
         <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-xs font-medium text-indigo-700">
           <Sparkles className="h-3.5 w-3.5" />
           The Git-Native Web Novel Network
