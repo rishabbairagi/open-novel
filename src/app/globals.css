@@ -2,30 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-body { @apply bg-paper text-ink font-sans antialiased; }
-:focus-visible { outline: 2px solid #3340d8; outline-offset: 2px; }
+@layer base {
+  :root {
+    --font-serif: "Newsreader", Georgia, serif;
+    --font-sans: "Instrument Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+  }
 
-/* Reader typography is driven by CSS variables set by ReaderShell. */
+  body {
+    @apply bg-[#FBFBFA] text-[#1E2022] font-sans antialiased selection:bg-[#E0E7FF] selection:text-[#1E1B4B];
+  }
+
+  :focus-visible {
+    outline: 2px solid #4F46E5;
+    outline-offset: 2px;
+  }
+}
+
+/* Custom scrollbar for desktop preview and reader */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.6);
+}
+
+/* Reader Typography Engine */
 .reader-prose {
   --tw-prose-body: var(--r-fg);
   --tw-prose-headings: var(--r-fg);
   --tw-prose-bold: var(--r-fg);
-  --tw-prose-links: var(--r-fg);
+  --tw-prose-links: #4F46E5;
   --tw-prose-quotes: var(--r-fg);
   --tw-prose-quote-borders: var(--r-border);
-  --tw-prose-hr: var(--r-border);
+  --tw-prose-hr: transparent;
   --tw-prose-counters: var(--r-muted);
   --tw-prose-bullets: var(--r-muted);
-  --tw-prose-captions: var(--r-muted);
   --tw-prose-code: var(--r-fg);
-  --tw-prose-th-borders: var(--r-border);
-  --tw-prose-td-borders: var(--r-border);
 }
-.reader-prose p { line-height: 1.85; text-wrap: pretty; }
-.reader-prose blockquote { font-style: normal; font-weight: 400; }
-.reader-prose blockquote p::before, .reader-prose blockquote p::after { content: none; }
-/* Scene break (***) renders as a centered ornament. */
-.reader-prose hr { border: 0; height: auto; margin: 2.5em 0; text-align: center; }
-.reader-prose hr::after { content: "*  *  *"; color: var(--r-muted); letter-spacing: 0.4em; }
 
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+.reader-prose p {
+  line-height: 1.9;
+  margin-bottom: 1.6em;
+  text-wrap: pretty;
+  letter-spacing: -0.011em;
+}
+
+.reader-prose blockquote {
+  font-style: italic;
+  border-left: 2px solid var(--r-border);
+  padding-left: 1.25rem;
+  margin: 1.75em 0;
+  opacity: 0.95;
+}
+
+.reader-prose hr {
+  border: 0;
+  margin: 3.5em 0;
+  text-align: center;
+  position: relative;
+}
+
+.reader-prose hr::after {
+  content: "♦   ♦   ♦";
+  color: var(--r-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.6em;
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
