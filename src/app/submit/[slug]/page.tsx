@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageShell from "@/components/PageShell";
 import Studio from "@/components/submit/Studio";
-import { getChapterList, getNovelBySlug, getNovelStaticParams } from "@/lib/novels";
+import { getChapterList, getNovelBySlug, getNovelStaticParams, getNovelSummaries } from "@/lib/novels";
 
 type Params = Promise<{ slug: string }>;
 
@@ -20,10 +20,11 @@ export default async function SubmitChapterPage({ params }: { params: Params }) 
   const { slug } = await params;
   const novel = getNovelBySlug(slug);
   if (!novel) notFound();
+  const novels = getNovelSummaries();
   const last = getChapterList(slug).at(-1)?.chapter ?? 0;
 
   return (
-    <PageShell width="max-w-5xl">
+    <PageShell width="max-w-5xl" searchNovels={novels}>
       <h1 className="font-serif text-4xl">Add a chapter to {novel.title}</h1>
       <p className="mt-2 text-mute">Chapter {last + 1} is next. The maintainers review it before it appears.</p>
       <div className="mt-8">

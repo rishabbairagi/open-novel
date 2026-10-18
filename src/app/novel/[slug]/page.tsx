@@ -5,7 +5,7 @@ import PageShell from "@/components/PageShell";
 import Cover from "@/components/Cover";
 import GenrePills from "@/components/GenrePills";
 import ContinueReading from "@/components/reader/ContinueReading";
-import { getChapterList, getNovelBySlug, getNovelStaticParams } from "@/lib/novels";
+import { getChapterList, getNovelBySlug, getNovelStaticParams, getNovelSummaries } from "@/lib/novels";
 import { formatDate, formatNumber } from "@/lib/utils";
 import { BookOpen, Calendar, Clock, Feather, PlusCircle } from "lucide-react";
 
@@ -25,10 +25,11 @@ export default async function NovelPage({ params }: { params: Params }) {
   const { slug } = await params;
   const novel = getNovelBySlug(slug);
   if (!novel) notFound();
+  const novels = getNovelSummaries();
   const chapters = getChapterList(slug);
 
   return (
-    <PageShell width="w-full">
+    <PageShell width="w-full" searchNovels={novels}>
       <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
         <Cover novel={novel} className="h-80 w-52 shrink-0 rounded-2xl shadow-xl ring-1 ring-black/10" />
         <div className="flex flex-col justify-between space-y-4">

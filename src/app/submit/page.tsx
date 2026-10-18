@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Write" };
 export default function SubmitPage() {
   const novels = getNovelSummaries();
   return (
-    <PageShell width="w-full">
+    <PageShell width="w-full" searchNovels={novels}>
       <h1 className="font-serif text-4xl">Propose a new novel</h1>
       <p className="mt-2 text-mute">
         Your novel details and first chapter are sent as a pull request for review.

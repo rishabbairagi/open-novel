@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
+    "build:index": "node scripts/build-search-index.mjs",
+    "prebuild": "node scripts/build-search-index.mjs",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit"
@@ -12,6 +14,7 @@
     "@octokit/rest": "^21.0.2",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.454.0",
+    "minisearch": "^7.2.0",
     "nanoid": "^5.0.9",
     "next": "^15.0.3",
     "react": "^19.0.0",

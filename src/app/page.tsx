@@ -15,7 +15,7 @@ export default function HomePage() {
   const totalWords = novels.reduce((s, n) => s + n.wordCount, 0);
 
   return (
-    <PageShell>
+    <PageShell searchNovels={novels}>
       <section className="mb-12 max-w-3xl space-y-3">
         <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-xs font-medium text-indigo-700">
           <Sparkles className="h-3.5 w-3.5" />
